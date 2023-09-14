@@ -1,0 +1,186 @@
+---
+import Layout from "../layouts/Layout.astro";
+---
+
+<Layout title="Welcome to Astro.">
+    <div class="header__animate">Header</div>
+    <section class="h-screen flex justify-center items-center">
+        <div>Hello world</div>
+    </section>
+    <section class="h-screen bg-gray-100">
+        <div id="scene_3d" class="w-full canva3d"></div>
+    </section>
+    <section class="h-screen flex justify-center items-center"></section>
+</Layout>
+
+<style>
+    .title__animate.active {
+        background-color: red;
+    }
+
+    .header__animate {
+        background-color: red;
+        position: fixed;
+        width: 100%;
+        z-index: 5;
+    }
+</style>
+
+<script>
+    import { gsap } from "gsap";
+    import { ScrollTrigger } from "gsap/ScrollTrigger";
+    import * as THREE from "three";
+    import { GLTFLoader } from "three/addons/loaders/GLTFLoader.js";
+
+    gsap.registerPlugin(ScrollTrigger);
+
+    const containerScene = document.getElementById("scene_3d");
+    const scene = new THREE.Scene();
+	scene.background = new THREE.Color(0xd0cfcf)
+    const camera = new THREE.PerspectiveCamera(
+        70,
+        window.innerWidth / window.innerHeight,
+        0.1,
+        100
+    );
+    camera.position.y = 2;
+
+    const renderer = new THREE.WebGLRenderer();
+    renderer.setSize(window.innerWidth, window.innerHeight);
+    containerScene?.appendChild(renderer.domElement);
+
+    window.addEventListener("resize", onWindowResize);
+
+    const loader = new GLTFLoader();
+    let loadedObject: THREE.Group<THREE.Object3DEventMap>;
+    loader.load(
+        "https://firebasestorage.googleapis.com/v0/b/dev-system2023.appspot.com/o/RobotExpressive.glb?alt=media&token=003fa6f9-58e9-4203-bc7d-f8d05faedc4b",
+        function (gltf) {
+            loadedObject = gltf.scene;
+            loadedObject.scale.x = 0.5;
+            loadedObject.scale.y = 0.5;
+            loadedObject.scale.z = 0.5;
+            scene.add(loadedObject);
+            gltf.scene.scale.set(0.5, 0.5, 0.5);
+            animate();
+            initialAnimationRobot(loadedObject, gltf.animations);
+        },
+        undefined,
+        function (e) {
+            console.error(e);
+        }
+    );
+
+    const light = new THREE.DirectionalLight(0xffffff, 10);
+    light.position.set(6, 6, 6);
+    scene.add(light);
+    const al = new THREE.AmbientLight(0xffffff, 1);
+    scene.add(al);
+
+    const geometry = new THREE.BoxGeometry(1, 1, 1);
+    const material = new THREE.MeshBasicMaterial({ color: 0x00ff00 });
+    const cube = new THREE.Mesh(geometry, material);
+    // scene.add(cube);
+
+    camera.position.z = 5;
+
+    const animate = () => {
+        requestAnimationFrame(animate);
+        renderer.render(scene, camera);
+    };
+
+    function onWindowResize() {
+        camera.aspect = window.innerWidth / window.innerHeight;
+        camera.updateProjectionMatrix();
+        renderer.setSize(window.innerWidth, window.innerHeight);
+    }
+
+    const initialAnimationRobot = (
+        object: THREE.Group<THREE.Object3DEventMap>,
+        animations: THREE.AnimationClip[]
+    ) => {
+        const tl = gsap.timeline();
+        tl.from(object.position, {
+            y: 2,
+            duration: 1,
+            ease: "power2.inOut",
+        });
+        tl.from(
+            object.rotation,
+            {
+                y: Math.PI / 4,
+                duration: 1,
+                ease: "power2.inOut",
+            },
+            0
+        );
+        tl.from(
+            object.scale,
+            {
+                x: 0.6,
+                y: 0.6,
+                z: 0.6,
+                duration: 1,
+                ease: "power2.inOut",
+            },
+            0
+        );
+		tl.to(object.position, {
+			y: 2,
+			duration: 1,
+			ease: "power2.inOut"
+		});
+		tl.to(
+            object.rotation,
+            {
+                y: - Math.PI / 4,
+                duration: 1,
+                ease: "power2.inOut",
+            }, 1
+        );
+        ScrollTrigger.create({
+            trigger: ".canva3d",
+            start: "top center",
+            end: "bottom center",
+            markers: true,
+            animation: tl,
+            scrub: true,
+        });
+    };
+
+    animate();
+
+    // gsap.to(".title__animate", {
+    // 	scrollTrigger: {
+    // 		trigger: ".title__animate",
+    // 		start: "top center",
+    // 		end: "top 100px",
+    // 		scrub: 1,
+    // 		toggleActions: "restart pause reverse pause",
+    // 		toggleClass: "active",
+    // 		onUpdate: (self) => {
+    // 		console.log(self.progress)
+    // 	}
+    // 	},
+    // 	y: 100,
+    // 	rotate: 360,
+    // 	ease: "none",
+    // 	duration: 3,
+    // });
+
+    const showAnim = gsap
+        .from(".header__animate", {
+            yPercent: -100,
+            paused: true,
+            duration: 0.2,
+        })
+        .progress(1);
+
+    ScrollTrigger.create({
+        start: "top top",
+        end: "bottom bottom",
+        onUpdate: (self) => {
+            self.direction === -1 ? showAnim.play() : showAnim.reverse();
+        },
+    });
+</script>
