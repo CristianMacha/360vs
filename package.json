@@ -12,6 +12,7 @@
   "dependencies": {
     "@astrojs/tailwind": "^5.0.0",
     "@astrojs/vercel": "^5.0.0",
+    "@splinetool/runtime": "^0.9.501",
     "astro": "^3.0.12",
     "dat.gui": "^0.7.9",
     "gsap": "^3.12.2",

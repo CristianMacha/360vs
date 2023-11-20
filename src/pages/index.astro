@@ -3,17 +3,89 @@ import Layout from "../layouts/Layout.astro";
 ---
 
 <Layout title="Welcome to Astro.">
-    <div class="header__animate">Header</div>
-    <section class="h-screen flex justify-center items-center">
-        <div>Hello world</div>
+    <!-- <div class="header__animate">Header</div> -->
+    <div class="h-screen"></div>
+    <div class="presentacion">
+        <spline-viewer url="https://prod.spline.design/oEryQihXvCRojRI4/scene.splinecode"></spline-viewer>
+        <!-- <spline-viewer
+            url="https://prod.spline.design/lGLhQR9PsWeFWjeB/scene.splinecode"
+        ></spline-viewer> -->
+        <!-- <spline-viewer url="https://prod.spline.design/UuuupFR4NafIGSrP/scene.splinecode"></spline-viewer> -->
+    </div>
+    <div class="h-screen"></div>
+    <!-- <spline-viewer url="https://prod.spline.design/ZTIk0tvjgxdTvjmC/scene.splinecode"></spline-viewer> -->
+    <!-- <section
+        class="h-screen flex justify-center items-center"
+        style="background-color: transparent; z-index: 0;"
+    >
+        <div>
+            Hello world askjfbjsdhfhdjsabvfhsad fhsdajbf hjsad
+            fhjsdabfhjbsjdfbakjsdnfajsdhfk jasdjk ajksdgfhkjas fjkasdhfaksjh
+        </div>
     </section>
-    <section class="h-screen bg-gray-100">
+    <section class="h-screen bg-gray-100 relative" style="z-index: 999;">
         <div id="scene_3d" class="w-full canva3d"></div>
     </section>
     <section class="h-screen flex justify-center items-center"></section>
+    <div class="relative">
+        <spline-viewer
+            url="https://prod.spline.design/4OxJw9TthGVVsHia/scene.splinecode"
+            width="60"></spline-viewer>
+        <div class="absolute top-0 bottom-0 left-0 right-0"></div>
+    </div>
+    <div class="relative">
+        <spline-viewer
+            url="https://prod.spline.design/I2uyLdN5UvBClSeD/scene.splinecode"
+        ></spline-viewer>
+    </div>
+    <spline-viewer url="https://prod.spline.design/BjHl6CFqeq3kyxKW/scene.splinecode"></spline-viewer>
+    <spline-viewer url="https://prod.spline.design/ZTIk0tvjgxdTvjmC/scene.splinecode"></spline-viewer>
+    <div class="relative">
+        <spline-viewer
+            url="https://prod.spline.design/m7lxDR5Uirvvv4w1/scene.splinecode"
+        ></spline-viewer>
+        <div class="absolute top-0 bottom-0 left-0 right-0"></div>
+    </div>
+    <div class="relative z-20">
+        <spline-viewer
+            url="https://prod.spline.design/nJ8UK8wYXXcElHIr/scene.splinecode"
+        ></spline-viewer>
+    </div>
+    <spline-viewer
+        url="https://prod.spline.design/ZTIk0tvjgxdTvjmC/scene.splinecode"
+    ></spline-viewer>
+    <spline-viewer
+        url="https://prod.spline.design/KVsFN3AdkVFEyvXE/scene.splinecode"
+    ></spline-viewer>
+    <spline-viewer
+        url="https://prod.spline.design/KVsFN3AdkVFEyvXE/scene.splinecode"
+    ></spline-viewer>
+    <spline-viewer
+        url="https://prod.spline.design/LZF0uTHJy8SF16vY/scene.splinecode"
+    ></spline-viewer>
+    <spline-viewer
+        url="https://prod.spline.design/OddIkGLKIRrvAkch/scene.splinecode"
+    ></spline-viewer>
+    <spline-viewer
+        url="https://prod.spline.design/z0Nw6Yw-c11ytXOp/scene.splinecode"
+    ></spline-viewer> -->
 </Layout>
 
 <style>
+    .presentacion {
+        /* background: #e3e8ea; */
+        filter: blur(1px);
+        /* background-color: linear-gradient(#5739FB, #000000); */
+        background: rgb(87,57,251);
+background: linear-gradient(180deg, rgba(87,57,251,1) 0%, rgba(0,0,0,1) 100%);
+        /* background: url("https://firebasestorage.googleapis.com/v0/b/dev-system2023.appspot.com/o/360%2FWhatsApp%20Image%202023-11-15%20at%2010.17.52.jpeg?alt=media&token=4f3b238a-c3a1-4e84-a134-4538841e142f"); */
+        width: 100%;
+        overflow: hidden;
+    }
+    canvas {
+        width: auto;
+        height: auto;
+    }
     .title__animate.active {
         background-color: red;
     }
@@ -30,22 +102,23 @@ import Layout from "../layouts/Layout.astro";
     import { gsap } from "gsap";
     import { ScrollTrigger } from "gsap/ScrollTrigger";
     import * as THREE from "three";
-    import { GLTFLoader } from "three/addons/loaders/GLTFLoader.js";
+    import { GLTFLoader, type GLTF } from "three/addons/loaders/GLTFLoader.js";
 
     gsap.registerPlugin(ScrollTrigger);
 
     const containerScene = document.getElementById("scene_3d");
+
     const scene = new THREE.Scene();
-	scene.background = new THREE.Color(0xd0cfcf)
+    scene.background = new THREE.Color(0xd0cfcf);
     const camera = new THREE.PerspectiveCamera(
-        70,
+        75,
         window.innerWidth / window.innerHeight,
         0.1,
         100
     );
-    camera.position.y = 2;
+    camera.position.y = 1;
 
-    const renderer = new THREE.WebGLRenderer();
+    const renderer = new THREE.WebGLRenderer({ antialias: true });
     renderer.setSize(window.innerWidth, window.innerHeight);
     containerScene?.appendChild(renderer.domElement);
 
@@ -54,16 +127,16 @@ import Layout from "../layouts/Layout.astro";
     const loader = new GLTFLoader();
     let loadedObject: THREE.Group<THREE.Object3DEventMap>;
     loader.load(
-        "https://firebasestorage.googleapis.com/v0/b/dev-system2023.appspot.com/o/RobotExpressive.glb?alt=media&token=003fa6f9-58e9-4203-bc7d-f8d05faedc4b",
-        function (gltf) {
+        "https://firebasestorage.googleapis.com/v0/b/rcr-cart.appspot.com/o/asteroid_on_hover.gltf?alt=media&token=c6ef4a2a-4961-48ea-b0f4-19de7676fa6d&_gl=1*1jaei6q*_ga*MTI5Mjk4NzIwNS4xNjk5Mjg1Mjg0*_ga_CW55HF8NVT*MTY5OTI4Nzc4Mi4yLjEuMTY5OTI4Nzk1NC4yMy4wLjA.",
+        function (gltf: GLTF) {
             loadedObject = gltf.scene;
             loadedObject.scale.x = 0.5;
             loadedObject.scale.y = 0.5;
             loadedObject.scale.z = 0.5;
             scene.add(loadedObject);
-            gltf.scene.scale.set(0.5, 0.5, 0.5);
+            gltf.scene.scale.set(1.5, 1.5, 1.5);
             animate();
-            initialAnimationRobot(loadedObject, gltf.animations);
+            initialAnimationRobot(loadedObject, gltf);
         },
         undefined,
         function (e) {
@@ -76,11 +149,6 @@ import Layout from "../layouts/Layout.astro";
     scene.add(light);
     const al = new THREE.AmbientLight(0xffffff, 1);
     scene.add(al);
-
-    const geometry = new THREE.BoxGeometry(1, 1, 1);
-    const material = new THREE.MeshBasicMaterial({ color: 0x00ff00 });
-    const cube = new THREE.Mesh(geometry, material);
-    // scene.add(cube);
 
     camera.position.z = 5;
 
@@ -97,9 +165,15 @@ import Layout from "../layouts/Layout.astro";
 
     const initialAnimationRobot = (
         object: THREE.Group<THREE.Object3DEventMap>,
-        animations: THREE.AnimationClip[]
+        gltf: GLTF
     ) => {
         const tl = gsap.timeline();
+        const mixer = new THREE.AnimationMixer(gltf.scene);
+        const clips = gltf.animations;
+        const action = mixer.clipAction(clips[0]);
+        console.log(action);
+        action.play();
+
         tl.from(object.position, {
             y: 2,
             duration: 1,
@@ -117,27 +191,29 @@ import Layout from "../layouts/Layout.astro";
         tl.from(
             object.scale,
             {
-                x: 0.6,
-                y: 0.6,
-                z: 0.6,
+                x: 2,
+                y: 2,
+                z: 2,
                 duration: 1,
                 ease: "power2.inOut",
             },
             0
         );
-		tl.to(object.position, {
-			y: 2,
-			duration: 1,
-			ease: "power2.inOut"
-		});
-		tl.to(
+        tl.to(object.position, {
+            y: 4,
+            duration: 1,
+            ease: "power2.inOut",
+        });
+        tl.to(
             object.rotation,
             {
-                y: - Math.PI / 4,
+                y: -Math.PI / 4,
                 duration: 1,
                 ease: "power2.inOut",
-            }, 1
+            },
+            1
         );
+
         ScrollTrigger.create({
             trigger: ".canva3d",
             start: "top center",
@@ -149,24 +225,6 @@ import Layout from "../layouts/Layout.astro";
     };
 
     animate();
-
-    // gsap.to(".title__animate", {
-    // 	scrollTrigger: {
-    // 		trigger: ".title__animate",
-    // 		start: "top center",
-    // 		end: "top 100px",
-    // 		scrub: 1,
-    // 		toggleActions: "restart pause reverse pause",
-    // 		toggleClass: "active",
-    // 		onUpdate: (self) => {
-    // 		console.log(self.progress)
-    // 	}
-    // 	},
-    // 	y: 100,
-    // 	rotate: 360,
-    // 	ease: "none",
-    // 	duration: 3,
-    // });
 
     const showAnim = gsap
         .from(".header__animate", {
@@ -183,4 +241,11 @@ import Layout from "../layouts/Layout.astro";
             self.direction === -1 ? showAnim.play() : showAnim.reverse();
         },
     });
+    window.onload = function() {
+        var shadowRoot = document.querySelector('spline-viewer')!.shadowRoot;
+        shadowRoot?.querySelector('#logo')!.remove();
+    }
+    // const canvas = document.getElementById("canvas3d") as HTMLCanvasElement;
+    // const app = new Application(canvas);
+    // app.load("https://prod.spline.design/GpAdwVycdQGpgWZ1/scene.splinecode");
 </script>
